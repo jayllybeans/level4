@@ -82,7 +82,7 @@ function animate()
 		player.x--;
 		player.vx = 0;
 	}
-	
+
 	while(platform1.hitTestPoint(player.bottom()) && player.vy >=0)
 	{
 		player.y--;
