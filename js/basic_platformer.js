@@ -100,7 +100,6 @@ function animate()
 		player.vx = 0;
 	}
 	
-	
 	//---------Objective: Jump the gap to get the blue pearl----------------------------------------------------------------------------------------------------
 	//---------Call the players drawDebug() function to see where his current hitpoints are
 	//---------Change the objects in the hitTestPoint function so that the player has a hitpoint on his bottom left and bottom right.
@@ -136,6 +135,7 @@ function animate()
 	platform1.drawRect();
 
 	player.drawRect();
+	player.drawDebug();
 	
 	goal.drawCircle();
 }
