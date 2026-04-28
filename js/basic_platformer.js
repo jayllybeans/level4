@@ -82,6 +82,22 @@ function animate()
 		player.x--;
 		player.vx = 0;
 	}
+	while(platform0.hitTestPoint(player.bottomLeft()) && player.vx <= 0 && player.vy >= 0)
+	{
+		player.y--;
+		player.vy = 0;
+		player.x++;
+		player.vx = 0;
+		player.canJump = true;
+	}
+	while(platform0.hitTestPoint(player.bottomRight()) && player.vx >= 0 && player.vy >= 0)
+	{
+		player.y--;
+		player.vy = 0;
+		player.x--;
+		player.vx = 0;
+		player.canJump = true;
+	}
 
 	while(platform1.hitTestPoint(player.bottom()) && player.vy >=0)
 	{
@@ -98,6 +114,22 @@ function animate()
 	{
 		player.x--;
 		player.vx = 0;
+	}
+	while(platform1.hitTestObject(player.bottomLeft()) && player.vy >= 0 && player.vx <= 0)
+	{
+		player.y--;
+		player.vy = 0;
+		player.x++;
+		player.vx = 0;
+		player.canJump = true;
+	}
+	while(platform1.hitTestObject(player.bottomRight()) && player.vy >= 0 && player.vx >= 0)
+	{
+		player.y--;
+		player.vy = 0;
+		player.x--;
+		player.vx = 0;
+		player.canJump = true;
 	}
 	
 	//---------Objective: Jump the gap to get the blue pearl----------------------------------------------------------------------------------------------------
