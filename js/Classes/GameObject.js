@@ -92,7 +92,11 @@ function GameObject(obj)
 		if(this.left().x <= obj.right().x && 
 		   this.right().x >= obj.left().x &&
 		   this.top().y <= obj.bottom().y &&
-		   this.bottom().y >= obj.top().y)
+		   this.bottom().y >= obj.top().y &&
+		   this.bottomLeft().y >= obj.top().y &&
+		   this.bottomLeft().x <= obj.right().x &&
+		   this.bottomRight().y >= obj.top().y &&
+		   this.bottomRight().x >= obj.left().x)
 		{
 			return true
 		}
@@ -109,7 +113,7 @@ function GameObject(obj)
 		   obj.y <= this.bottomLeft().y &&
 		   obj.x >= this.bottomLeft().x &&
 		   obj.y <= this.bottomRight().y &&
-		   obj.x <= this.bottomRight().x)
+		   obj.x <= this.right().x)
 		{
 			return true;
 		}
