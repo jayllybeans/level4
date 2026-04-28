@@ -10,41 +10,26 @@ var player;
 	canvas = document.getElementById("canvas");
 	context = canvas.getContext("2d");	
 
-	player = new GameObject();
+	player = new GameObject({x:150});
 
-	//Instantiate platforms
-		platform0 = new GameObject();
-		platform0.width = 500;
-		platform0.y = player.y +player.height/2 +platform0.height/2;
+	platform0 = new GameObject();
+		platform0.width = 150;
+		platform0.x = platform0.width/2;
+		platform0.y = player.y +player.height/2 + platform0.height/2;
 		platform0.color = "#66ff33";
 		
 	
 	platform1 = new GameObject();
-		platform1.width = 50;
-		platform1.height = 300;
-		platform1.y = platform0.y - platform0.height/2 - platform1.height/2;
-		platform1.x = platform0.x-platform0.width/2;
-		platform1.color = "#00ffff";
+		platform1.width = 575;
+		platform1.x = canvas.width -platform1.width/2;
+		platform1.y = player.y +player.height/2 + platform1.height/2;
+		platform1.color = "#66ff33";
 		
-	platform2 = new GameObject();
-		platform2.width = 50;
-		platform2.height = 300;
-		platform2.y = platform0.y - platform0.height/2 - platform2.height/2;
-		platform2.x = platform0.x + platform0.width/2;
-		platform2.color = "#00ffff";
-		
-	platform3 = new GameObject();
-		platform3.width = 300;
-		platform3.height = 50;
-		platform3.y = platform2.y;
-		platform3.x = platform2.x ;
-		platform3.color = "#ff00ff";
 	
-	//This platform uses an object literal to define the properties
-	platform4 = new GameObject({width:300, height:50, x:platform1.x, y:platform3.y, color:"#ffff00"});
+	goal = new GameObject({width:24, height:50, x:platform1.x + 100, y:platform1.y-100, color:"#00ffff"});
 	
-	//Global Physics Variables
-	var fX = .97;
+
+	var fX = .85;
 	var fY = .97;
 	
 	var gravity = 1;
@@ -57,14 +42,12 @@ function animate()
 	
 	context.clearRect(0,0,canvas.width, canvas.height);	
 
-	//Jump with the w key
-	if(w && player.canJump)
+	if(w && player.canJump && player.vy ==0)
 	{
 		player.canJump = false;
 		player.vy += player.jumpHeight;
 	}
-	
-	//Apply acceleration to velocity.
+
 	if(a)
 	{
 		player.vx += -player.ax * player.force;
@@ -82,56 +65,78 @@ function animate()
 	player.x += Math.round(player.vx);
 	player.y += Math.round(player.vy);
 	
-	//Hit the ground
+
 	while(platform0.hitTestPoint(player.bottom()) && player.vy >=0)
 	{
 		player.y--;
 		player.vy = 0;
 		player.canJump = true;
 	}
-	
-	while(platform1.hitTestPoint(player.left()))
+	while(platform0.hitTestPoint(player.left()) && player.vx <=0)
 	{
 		player.x++;
 		player.vx = 0;
 	}
-	
-	while(platform2.hitTestPoint(player.right()))
+	while(platform0.hitTestPoint(player.right()) && player.vx >=0)
 	{
 		player.x--;
 		player.vx = 0;
 	}
 	
-	while(platform3.hitTestPoint(player.top()))
+	while(platform1.hitTestPoint(player.bottom()) && player.vy >=0)
 	{
-		player.y++;
+		player.y--;
 		player.vy = 0;
+		player.canJump = true;
 	}
-	while(platform3.hitTestPoint(player.bottom()) && player.vy >=0)
+	while(platform1.hitTestPoint(player.left()) && player.vx <=0)
+	{
+		player.x++;
+		player.vx = 0;
+	}
+	while(platform1.hitTestPoint(player.right()) && player.vx >=0)
+	{
+		player.x--;
+		player.vx = 0;
+	}
+	
+	
+	//---------Objective: Jump the gap to get the blue pearl----------------------------------------------------------------------------------------------------
+	//---------Call the players drawDebug() function to see where his current hitpoints are
+	//---------Change the objects in the hitTestPoint function so that the player has a hitpoint on his bottom left and bottom right.
+	//---------You will need to manually draw these new points if you want to see them for debugging purposes.
+	
+	/*-------------------------------------------------------------------------------------------------------------------------------------
+				NOTE: An unnecessary but great alternative to simply changing the object literals in the hitTestPoint 
+				would be to create actual bottomRight() and bottomLeft() methods in your GameObject. However this is not necessary to complete this level. 
+				You simply need to change the values of the x and y properties of the object literals listed below to find the solution.
+	*/
+
+	while(platform0.hitTestPoint({x:player.x, y:player.y}) && player.vy >=0)
 	{
 		player.y--;
 		player.vy = 0;
 		player.canJump = true;
 	}
 	
-	while(platform4.hitTestPoint(player.bottom()) && player.vy >=0)
+	while(platform1.hitTestPoint({x:player.x, y:player.y}) && player.vy >=0)
 	{
-			player.y--;
-			player.vy = 0;
-			player.canJump = true;
-	
+		player.y--;
+		player.vy = 0;
+		player.canJump = true;
 	}
 	
-	
+	if(player.hitTestObject(goal))
+	{
+		goal.y = 100000;
+	}
+
 	
 	platform0.drawRect();
 	platform1.drawRect();
-	platform2.drawRect();
-	platform3.drawRect();
-	platform4.drawRect();
+
 	player.drawRect();
 	
-	//Show hit points
-	player.drawDebug();
+	goal.drawCircle();
 }
 
